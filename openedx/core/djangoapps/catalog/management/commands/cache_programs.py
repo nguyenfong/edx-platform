@@ -156,7 +156,7 @@ class Command(BaseCommand):
 
     def process_pathways(self, site, pathways, programs):
         """
-        For each program, added references to each pathway it is a part of.
+        For each program, add references to each pathway it is a part of.
         For each pathway, replace the "programs" dict with "program_uuids",
         which only contains uuids (since program data is already cached)
         """

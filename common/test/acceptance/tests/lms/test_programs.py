@@ -65,7 +65,7 @@ class ProgramPageBase(ProgramsConfigMixin, CatalogIntegrationMixin, UniqueCourse
         program_types = [program['type'] for program in programs]
         CatalogFixture().install_program_types(program_types)
 
-        CatalogFixture().install_credit_pathays(credit_pathways)
+        CatalogFixture().install_credit_pathways(credit_pathways)
 
     def cache_programs(self):
         """

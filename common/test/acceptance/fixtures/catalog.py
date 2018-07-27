@@ -40,7 +40,7 @@ class CatalogFixture(object):
             data={key: json.dumps(uuids)},
         )
 
-    def install_credit_pathays(self, credit_pathways):
+    def install_credit_pathways(self, credit_pathways):
         """
         Stub the discovery service's credit pathways API endpoint
         :param credit_pathways: A list of credit pathways. List endpoint will be stubbed using data from this list.
