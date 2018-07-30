@@ -8,4 +8,4 @@ SITE_PROGRAM_UUIDS_CACHE_KEY_TPL = 'program-uuids-{domain}'
 CREDIT_PATHWAY_CACHE_KEY_TPL = 'credit-pathway-{id}'
 
 # Cache key used to locate an item containing a list of all credit pathway ids for a site.
-SITE_CREDIT_PATHWAY_IDS_CACHE_KEY_TPL = 'credit-pathway-names-{domain}'
+SITE_CREDIT_PATHWAY_IDS_CACHE_KEY_TPL = 'credit-pathway-ids-{domain}'

@@ -126,8 +126,8 @@ def get_program_types(name=None):
 
 
 def get_credit_pathways(site, pathway_id=None):
-    """Read pathways from the cache.
-
+    """
+    Read pathways from the cache.
     The cache is populated by a management command, cache_programs.
 
     Arguments:
@@ -138,7 +138,7 @@ def get_credit_pathways(site, pathway_id=None):
 
     Returns:
         list of dict, representing pathways.
-        dict, if a specific program is requested.
+        dict, if a specific pathway is requested.
     """
     missing_details_msg_tpl = 'Failed to get details for credit pathway {id} from the cache.'
 
@@ -153,7 +153,7 @@ def get_credit_pathways(site, pathway_id=None):
         logger.warning('Failed to get credit pathway ids from the cache.')
 
     pathways = cache.get_many([CREDIT_PATHWAY_CACHE_KEY_TPL.format(id=pathway_id) for pathway_id in pathway_ids])
-    pathways = list(pathways.values())
+    pathways = pathways.values()
 
     # The get_many above sometimes fails to bring back details cached on one or
     # more Memcached nodes. It doesn't look like these keys are being evicted.
@@ -169,9 +169,10 @@ def get_credit_pathways(site, pathway_id=None):
             'Failed to get details for {count} pathways. Retrying.'.format(count=len(missing_ids))
         )
 
-        retried_pathways = cache.get_many([CREDIT_PATHWAY_CACHE_KEY_TPL.format(
-            id=pathway_id) for pathway_id in missing_ids])
-        pathways += list(retried_pathways.values())
+        retried_pathways = cache.get_many(
+            [CREDIT_PATHWAY_CACHE_KEY_TPL.format(id=pathway_id) for pathway_id in missing_ids]
+        )
+        pathways += retried_pathways.values()
 
         still_missing_ids = set(pathway_ids) - set(pathway['id'] for pathway in pathways)
         for missing_id in still_missing_ids:

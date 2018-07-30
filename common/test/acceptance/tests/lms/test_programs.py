@@ -30,8 +30,7 @@ class ProgramPageBase(ProgramsConfigMixin, CatalogIntegrationMixin, UniqueCourse
             self.programs += pathway['programs']
 
         # add some of the previously created programs to some pathways
-        self.credit_pathways[0]['programs'].append(self.programs[0])
-        self.credit_pathways[0]['programs'].append(self.programs[1])
+        self.credit_pathways[0]['programs'].extend([self.programs[0], self.programs[1]])
         self.credit_pathways[1]['programs'].append(self.programs[0])
 
         self.username = None

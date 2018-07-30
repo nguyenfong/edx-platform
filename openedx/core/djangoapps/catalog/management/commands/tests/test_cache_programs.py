@@ -49,8 +49,7 @@ class TestCachePrograms(CatalogIntegrationMixin, CacheIsolationTestCase, SiteMix
         self.uuids = [program['uuid'] for program in self.programs]
 
         # add some of the previously created programs to some pathways
-        self.pathways[0]['programs'].append(self.programs[0])
-        self.pathways[0]['programs'].append(self.programs[1])
+        self.pathways[0]['programs'].extend([self.programs[0], self.programs[1]])
         self.pathways[1]['programs'].append(self.programs[0])
 
     def mock_list(self):

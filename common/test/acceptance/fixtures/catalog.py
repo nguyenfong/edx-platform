@@ -43,7 +43,9 @@ class CatalogFixture(object):
     def install_credit_pathways(self, credit_pathways):
         """
         Stub the discovery service's credit pathways API endpoint
-        :param credit_pathways: A list of credit pathways. List endpoint will be stubbed using data from this list.
+
+        Arguments:
+             credit_pathways (list): A list of credit pathways. List endpoint will be stubbed using data from this list.
         """
         requests.put(
             '{}/set_config'.format(CATALOG_STUB_URL),
