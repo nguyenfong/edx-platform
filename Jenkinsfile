@@ -66,46 +66,46 @@ pipeline {
                         }
                     }
                 }
-                stage("cms-unit") {
-                    environment {
-                        NO_PREREQ_INSTALL="True"
-                        TEST_SUITE = "cms-unit"
-                        XDIST_FILE_NAME_PREFIX = "${TEST_SUITE}"
-                        XDIST_NUM_TASKS = 2
-                    }
-                    steps {
-                        script {
-                            runPythonTests()
-                        }
-                    }
-                    post {
-                        always {
-                            script {
-                                pythonTestCleanup()
-                            }
-                        }
-                    }
-                }
-                stage("commonlib-unit") {
-                    environment {
-                        NO_PREREQ_INSTALL="True"
-                        TEST_SUITE = "commonlib-unit"
-                        XDIST_FILE_NAME_PREFIX = "${TEST_SUITE}"
-                        XDIST_NUM_TASKS = 3
-                    }
-                    steps {
-                        script {
-                            runPythonTests()
-                        }
-                    }
-                    post {
-                        always {
-                            script {
-                                pythonTestCleanup()
-                            }
-                        }
-                    }
-                }
+                // stage("cms-unit") {
+                //     environment {
+                //         NO_PREREQ_INSTALL="True"
+                //         TEST_SUITE = "cms-unit"
+                //         XDIST_FILE_NAME_PREFIX = "${TEST_SUITE}"
+                //         XDIST_NUM_TASKS = 2
+                //     }
+                //     steps {
+                //         script {
+                //             runPythonTests()
+                //         }
+                //     }
+                //     post {
+                //         always {
+                //             script {
+                //                 pythonTestCleanup()
+                //             }
+                //         }
+                //     }
+                // }
+                // stage("commonlib-unit") {
+                //     environment {
+                //         NO_PREREQ_INSTALL="True"
+                //         TEST_SUITE = "commonlib-unit"
+                //         XDIST_FILE_NAME_PREFIX = "${TEST_SUITE}"
+                //         XDIST_NUM_TASKS = 3
+                //     }
+                //     steps {
+                //         script {
+                //             runPythonTests()
+                //         }
+                //     }
+                //     post {
+                //         always {
+                //             script {
+                //                 pythonTestCleanup()
+                //             }
+                //         }
+                //     }
+                // }
             }
         }
     }
