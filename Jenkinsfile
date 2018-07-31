@@ -39,9 +39,9 @@ pipeline {
                         userRemoteConfigs: [[credentialsId: 'jenkins-worker',
                         refspec: '+refs/heads/*:refs/remotes/origin/* +refs/pull/*:refs/remotes/origin/pr/*',
                         url: 'git@github.com:edx/edx-platform.git']]]
+                    sh '''source scripts/jenkins-common.sh
+                    paver install_python_prereqs'''
                 }
-                sh '''source scripts/jenkins-common.sh
-                paver install_python_prereqs'''
             }
         }
         stage('Run Tests') {
