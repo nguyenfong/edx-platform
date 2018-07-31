@@ -57,6 +57,16 @@ class AdvancedSettingsPage(CoursePage):
         """
         return self.q(css=DEPRECATED_SETTINGS_SELECTOR).visible
 
+    def toggle_deprecated_settings(self):
+        """
+        Show deprecated Settings
+        """
+        self.q(css=DEPRECATED_SETTINGS_BUTTON_SELECTOR).click()
+        if self.deprecated_settings_button_text == 'Show Deprecated Settings':
+            self.wait_for_element_absence(DEPRECATED_SETTINGS_SELECTOR, 'Deprecated Settings are not present')
+        else:
+            self.wait_for_element_presence(DEPRECATED_SETTINGS_SELECTOR, 'Deprecated Settings are present')
+
     def wait_for_modal_load(self):
         """
         Wait for validation response from the server, and make sure that
