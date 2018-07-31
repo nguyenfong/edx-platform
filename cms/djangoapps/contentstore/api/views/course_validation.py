@@ -10,6 +10,7 @@ from contentstore.course_info_model import get_course_updates
 from contentstore.views.certificates import CertificateManager
 from openedx.core.lib.api.view_utils import DeveloperErrorViewMixin, view_auth_classes
 from xmodule.modulestore.django import modulestore
+from xmodule.util.grading_policy import default_grading_policy
 
 from .utils import get_bool_param, course_author_access_required
 
@@ -195,8 +196,10 @@ class CourseValidationView(DeveloperErrorViewMixin, GenericAPIView):
         )
 
     def _grades_validation(self, course):
+        has_grading_policy = self._has_grading_policy(course)
         sum_of_weights = course.grader.sum_of_weights
         return dict(
+            has_grading_policy=has_grading_policy,
             sum_of_weights=sum_of_weights,
         )
 
@@ -276,3 +279,15 @@ class CourseValidationView(DeveloperErrorViewMixin, GenericAPIView):
 
     def _has_start_date(self, course):
         return not course.start_date_is_still_default
+
+    def _has_grading_policy(self, course):
+        grading_policy_formatted = {}
+        default_grading_policy_formatted = {}
+
+        for _, assignment_type, weight in course.grader.subgraders:
+            grading_policy_formatted[assignment_type] = weight
+
+        for assignment in default_grading_policy["GRADER"]:
+            default_grading_policy_formatted[assignment["type"]] = assignment["weight"]
+
+        return grading_policy_formatted != default_grading_policy_formatted

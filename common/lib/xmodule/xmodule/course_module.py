@@ -24,6 +24,7 @@ from xmodule.course_metadata_utils import DEFAULT_START_DATE
 from xmodule.graders import grader_from_conf
 from xmodule.seq_module import SequenceDescriptor, SequenceModule
 from xmodule.tabs import CourseTabList, InvalidTabsException
+from xmodule.util.grading_policy import default_grading_policy
 from .fields import Date
 
 log = logging.getLogger(__name__)
@@ -229,40 +230,7 @@ class CourseFields(object):
     )
     grading_policy = Dict(
         help=_("Grading policy definition for this class"),
-        default={
-            "GRADER": [
-                {
-                    "type": "Homework",
-                    "min_count": 12,
-                    "drop_count": 2,
-                    "short_label": "HW",
-                    "weight": 0.15,
-                },
-                {
-                    "type": "Lab",
-                    "min_count": 12,
-                    "drop_count": 2,
-                    "weight": 0.15,
-                },
-                {
-                    "type": "Midterm Exam",
-                    "short_label": "Midterm",
-                    "min_count": 1,
-                    "drop_count": 0,
-                    "weight": 0.3,
-                },
-                {
-                    "type": "Final Exam",
-                    "short_label": "Final",
-                    "min_count": 1,
-                    "drop_count": 0,
-                    "weight": 0.4,
-                }
-            ],
-            "GRADE_CUTOFFS": {
-                "Pass": 0.5,
-            },
-        },
+        default=default_grading_policy,
         scope=Scope.content
     )
     show_calculator = Boolean(
