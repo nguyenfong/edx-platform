@@ -8,7 +8,7 @@ python scripts/xdist/pytest_container_manager.py -a up -n ${XDIST_NUM_TASKS} \
 -sg ${XDIST_CONTAINER_SECURITY_GROUP} \
 --file_name_prefix ${XDIST_FILE_NAME_PREFIX}
 
-ip_list=$(<xdist_files/${XDIST_FILE_NAME_PREFIX}_ips.txt)
+ip_list=$(<xdist_files/${XDIST_FILE_NAME_PREFIX}-ips.txt)
 for ip in $(echo $ip_list | sed "s/,/ /g")
 do
     container_reqs_cmd="ssh -o StrictHostKeyChecking=no ubuntu@$ip 'cd /edx/app/edxapp/edx-platform;
