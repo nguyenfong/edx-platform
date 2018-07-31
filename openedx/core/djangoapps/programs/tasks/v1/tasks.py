@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from edx_rest_api_client import exceptions
 from opaque_keys.edx.keys import CourseKey
+from time import sleep
 
 from course_modes.models import CourseMode
 from lms.djangoapps.certificates.models import GeneratedCertificate
@@ -174,7 +175,23 @@ def award_program_certificates(self, username):
             try:
                 award_program_certificate(credentials_client, username, program_uuid)
                 LOGGER.info('Awarded certificate for program %s to user %s', program_uuid, username)
-            except exceptions.HttpClientError:
+            except exceptions.HttpClientError as exc:
+                # Grab the status code from the client error, because our API
+                # client does not properly handle 429 errors. In the future,
+                # we may want to fork slumber, add 429 handling, and use that
+                # in edx_rest_api_client.
+                # A 429 status code looks like:
+                #   "Client Error 429: http://example-endpoint/"
+                status_code = int(str(exc).split(':')[0][-3:])
+                if status_code == 429:
+                    LOGGER.info(
+                        'Rate limited. Retrying task to award certificates to user {username} in 60 seconds'.format(
+                            username=username
+                        )
+                    )
+                    # Retry after 60 seconds, when we should be in a new throttling window
+                    raise self.retry(exc=exc, countdown=60, max_retries=MAX_RETRIES)
+
                 LOGGER.exception(
                     'Certificate for program %s not configured, unable to award certificate to %s',
                     program_uuid, username
