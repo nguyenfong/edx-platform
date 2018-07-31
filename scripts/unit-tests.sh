@@ -38,7 +38,7 @@ fi
 
 if [[ -n "$XDIST_NUM_TASKS" ]]; then
     bash scripts/xdist/prepare_xdist_nodes.sh
-    PAVER_ARGS="-v --xdist_ip_addresses="$(<xdist_files/${XDIST_FILE_NAME_PREFIX}-task-arns""
+    PAVER_ARGS="-v --xdist_ip_addresses="$(<xdist_files/${XDIST_FILE_NAME_PREFIX}-ips.txt)""
     export SHARD="all"
 else
     PAVER_ARGS="-v"
