@@ -19,7 +19,6 @@ def pythonTestCleanup() {
 }
 
 pipeline {
-
     agent { label "jenkins-worker" }
     options {
         timestamps()
@@ -32,7 +31,7 @@ pipeline {
         XDIST_GIT_BRANCH = "${ghprbActualCommit}"
     }
     stages {
-        stage("Git checkout"){
+        stage("Test setup"){
             steps {
                 sshagent(credentials: ['jenkins-worker'], ignoreMissing: true) {
                     checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '${sha1}']],
@@ -41,48 +40,50 @@ pipeline {
                         refspec: '+refs/heads/*:refs/remotes/origin/* +refs/pull/*:refs/remotes/origin/pr/*',
                         url: 'git@github.com:edx/edx-platform.git']]]
                 }
+                sh '''source scripts/jenkins-common.sh
+                paver install_python_prereqs'''
             }
         }
         stage('Run Tests') {
             parallel {
-                // stage("lms-unit") {
-                //     environment {
-                //         TEST_SUITE = "lms-unit"
-                //         XDIST_FILE_NAME_PREFIX = "${TEST_SUITE}"
-                //         XDIST_NUM_TASKS = 10
-                //     }
-                //     steps {
-                //         script {
-                //             runPythonTests()
-                //         }
-                //     }
-                //     post {
-                //         always {
-                //             script {
-                //                 pythonTestCleanup()
-                //             }
-                //         }
-                //     }
-                // }
-                // stage("cms-unit") {
-                //     environment {
-                //         TEST_SUITE = "cms-unit"
-                //         XDIST_FILE_NAME_PREFIX = "${TEST_SUITE}"
-                //         XDIST_NUM_TASKS = 2
-                //     }
-                //     steps {
-                //         script {
-                //             runPythonTests()
-                //         }
-                //     }
-                //     post {
-                //         always {
-                //             script {
-                //                 pythonTestCleanup()
-                //             }
-                //         }
-                //     }
-                // }
+                stage("lms-unit") {
+                    environment {
+                        TEST_SUITE = "lms-unit"
+                        XDIST_FILE_NAME_PREFIX = "${TEST_SUITE}"
+                        XDIST_NUM_TASKS = 10
+                    }
+                    steps {
+                        script {
+                            runPythonTests()
+                        }
+                    }
+                    post {
+                        always {
+                            script {
+                                pythonTestCleanup()
+                            }
+                        }
+                    }
+                }
+                stage("cms-unit") {
+                    environment {
+                        TEST_SUITE = "cms-unit"
+                        XDIST_FILE_NAME_PREFIX = "${TEST_SUITE}"
+                        XDIST_NUM_TASKS = 2
+                    }
+                    steps {
+                        script {
+                            runPythonTests()
+                        }
+                    }
+                    post {
+                        always {
+                            script {
+                                pythonTestCleanup()
+                            }
+                        }
+                    }
+                }
                 stage("commonlib-unit") {
                     environment {
                         TEST_SUITE = "commonlib-unit"
