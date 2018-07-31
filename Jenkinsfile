@@ -1,7 +1,8 @@
 def runPythonTests() {
     ansiColor('gnome-terminal') {
         sshagent(credentials: ['jenkins-worker', 'jenkins-worker-pem'], ignoreMissing: true) {
-            console_output = sh returnStdout: true, script: 'bash scripts/generic-ci-tests.sh'
+            console_output = sh returnStdout: true, script: '''source $HOME/edx-venv/bin/activate
+            bash scripts/generic-ci-tests.sh'''
             dir('stdout') {
                 writeFile file: "${TEST_SUITE}-stdout.log", text: console_output
             }
