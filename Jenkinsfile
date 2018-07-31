@@ -48,6 +48,7 @@ pipeline {
             parallel {
                 stage("lms-unit") {
                     environment {
+                        NO_PREREQ_INSTALL="True"
                         TEST_SUITE = "lms-unit"
                         XDIST_FILE_NAME_PREFIX = "${TEST_SUITE}"
                         XDIST_NUM_TASKS = 10
@@ -67,6 +68,7 @@ pipeline {
                 }
                 stage("cms-unit") {
                     environment {
+                        NO_PREREQ_INSTALL="True"
                         TEST_SUITE = "cms-unit"
                         XDIST_FILE_NAME_PREFIX = "${TEST_SUITE}"
                         XDIST_NUM_TASKS = 2
@@ -86,6 +88,7 @@ pipeline {
                 }
                 stage("commonlib-unit") {
                     environment {
+                        NO_PREREQ_INSTALL="True"
                         TEST_SUITE = "commonlib-unit"
                         XDIST_FILE_NAME_PREFIX = "${TEST_SUITE}"
                         XDIST_NUM_TASKS = 3
