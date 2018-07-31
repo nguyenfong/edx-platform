@@ -21,19 +21,19 @@ pipeline {
     agent { label "jenkins-worker" }
     options {
         timestamps()
-        timeout(75)
+        timeout(60)
     }
     environment {
         XDIST_CONTAINER_SUBNET = credentials('XDIST_CONTAINER_SUBNET')
         XDIST_CONTAINER_SECURITY_GROUP = credentials('XDIST_CONTAINER_SECURITY_GROUP')
         XDIST_CONTAINER_TASK_NAME = "jenkins-worker-task"
-        XDIST_GIT_BRANCH = "${sha1}"
+        XDIST_GIT_BRANCH = "${ghprbActualCommit}"
     }
     stages {
         stage("Git checkout"){
             steps {
                 sshagent(credentials: ['jenkins-worker'], ignoreMissing: true) {
-                    checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '${sha1}']],
+                    checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '${XDIST_GIT_BRANCH}']],
                         doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [],
                         userRemoteConfigs: [[credentialsId: 'jenkins-worker',
                         refspec: '+refs/heads/*:refs/remotes/origin/* +refs/pull/*:refs/remotes/origin/pr/*',
