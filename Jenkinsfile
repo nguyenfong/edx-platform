@@ -33,7 +33,7 @@ pipeline {
         stage("Git checkout"){
             steps {
                 sshagent(credentials: ['jenkins-worker'], ignoreMissing: true) {
-                    checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '${XDIST_GIT_BRANCH}']],
+                    checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '${sha1}']],
                         doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [],
                         userRemoteConfigs: [[credentialsId: 'jenkins-worker',
                         refspec: '+refs/heads/*:refs/remotes/origin/* +refs/pull/*:refs/remotes/origin/pr/*',
