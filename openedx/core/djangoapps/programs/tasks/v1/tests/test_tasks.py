@@ -292,7 +292,7 @@ class AwardProgramCertificatesTestCase(CatalogIntegrationMixin, CredentialsApiCo
         self.assertEqual(mock_get_certified_programs.call_count, 2)
         self.assertEqual(mock_award_program_certificate.call_count, 1)
 
-    def test_retry_on_credentials_api_429_errors(
+    def test_retry_on_credentials_api_429_error(
         self,
         mock_get_completed_programs,
         mock_get_certified_programs,
@@ -310,6 +310,25 @@ class AwardProgramCertificatesTestCase(CatalogIntegrationMixin, CredentialsApiCo
         tasks.award_program_certificates.delay(self.student.username).get()
 
         self.assertEqual(mock_award_program_certificate.call_count, 2)
+
+    def test_no_retry_oncredentials_api_404_error(
+        self,
+        mock_get_completed_programs,
+        mock_get_certified_programs,
+        mock_award_program_certificate,
+    ):
+        """
+        Verify that a 429 error causes the task to fail and then retry.
+        """
+        mock_get_completed_programs.return_value = [1, 2]
+        mock_get_certified_programs.side_effect = [[], [2]]
+        mock_award_program_certificate.side_effect = self._make_side_effect(
+            [exceptions.HttpClientError('Client Error 404: http://example-endpoint/'), None]
+        )
+
+        tasks.award_program_certificates.delay(self.student.username).get()
+
+        self.assertEqual(mock_award_program_certificate.call_count, 1)
 
     def test_no_retry_on_credentials_api_not_found_errors(
         self,
