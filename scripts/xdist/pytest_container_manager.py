@@ -106,16 +106,16 @@ class PytestContainerManager():
 
         # Generate .txt files containing IP addresses and task arns
         if not os.path.exists("xdist_files"):
-                os.makedirs("xdist_files")
+            os.makedirs("xdist_files")
         ip_list_string = ",".join(ip_addresses)
         logger.info("Task IP list: {}".format(ip_list_string))
-        ip_list_file = open("pytest_task_ips.txt", "w")
+        ip_list_file = open("xdist_files/{}-ips.txt".format(file_name_prefix), "w")
         ip_list_file.write(ip_list_string)
         ip_list_file.close()
 
         task_arn_list_string = ",".join(task_arns)
         logger.info("Task arn list: {}".format(task_arn_list_string))
-        task_arn_file = open("pytest_task_arns.txt", "w")
+        task_arn_file = open("xdist_files/{}-task-arns.txt".format(file_name_prefix), "w")
         task_arn_file.write(task_arn_list_string)
         task_arn_file.close()
 
