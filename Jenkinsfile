@@ -62,44 +62,6 @@ pipeline {
                         }
                     }
                 }
-                stage("cms-unit") {
-                    environment {
-                        TEST_SUITE = "cms-unit"
-                        XDIST_FILE_NAME_PREFIX = "${TEST_SUITE}"
-                        XDIST_NUM_TASKS = 2
-                    }
-                    steps {
-                        script {
-                            runPythonTests()
-                        }
-                    }
-                    post {
-                        always {
-                            script {
-                                pythonTestCleanup()
-                            }
-                        }
-                    }
-                }
-                stage("commonlib-unit") {
-                    environment {
-                        TEST_SUITE = "commonlib-unit"
-                        XDIST_FILE_NAME_PREFIX = "${TEST_SUITE}"
-                        XDIST_NUM_TASKS = 3
-                    }
-                    steps {
-                        script {
-                            runPythonTests()
-                        }
-                    }
-                    post {
-                        always {
-                            script {
-                                pythonTestCleanup()
-                            }
-                        }
-                    }
-                }
             }
         }
     }
